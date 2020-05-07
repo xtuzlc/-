@@ -64,6 +64,8 @@ class ChartView(QChartView,QChart):
         yint = random.randint(300,1000)
         #添加数据到曲线末端
         self.series.append(bjtime.toMSecsSinceEpoch(),yint)
+        points = self.series.pointsVector()
+        print(len(points))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
