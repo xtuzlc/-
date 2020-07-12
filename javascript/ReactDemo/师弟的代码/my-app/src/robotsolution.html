@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器人正解</title>
+    <style type="text/css">
+    *{
+            margin: 0;
+            padding: 0;
+            background-color: #EAEAEA;
+        }
+        .inputjoint{
+            width: 150px;
+            height: 25px;
+            
+        }
+        .center-in-center{
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            width: 600px;
+            height: 540px;
+            background: rgba(0, 0, 0, .3);
+            border: 2px solid blue;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="center-in-center">
+        joint1:<input type="text" id="inputjoint1" name="joint1" class="inputjoint" style="font-size: 20px;"/><br/><br/>
+        joint2:<input type="text" id="inputjoint2" name="joint2" class="inputjoint" style="font-size: 20px;"/><br/><br/>
+        joint3:<input type="text" id="inputjoint3" name="joint3" class="inputjoint" style="font-size: 20px;"/><br/><br/>
+        joint4:<input type="text" id="inputjoint4" name="joint4" class="inputjoint" style="font-size: 20px;"/><br/><br/>
+        joint5:<input type="text" id="inputjoint5" name="joint5" class="inputjoint" style="font-size: 20px;"/><br/><br/>
+        joint6:<input type="text" id="inputjoint6" name="joint6" class="inputjoint" style="font-size: 20px;"/><br/><br/>
+        
+        <button id="btn" onclick="getdata();" style="width: 120px;height: 30px;">机器人正解</button>
+        <button id="btn1" onclick="init();" style="width: 80px;height:30px">复位</button>
+        <br/><br/>
+        <b>nx:</b> <input type="text" id="inputnx" name="px" class="inputjoint" style="font-size: 20px;" disabled/>
+        <b>ny:</b> <input type="text" id="inputny" name="py" class="inputjoint" style="font-size: 20px;" disabled/>
+        <b>nz:</b> <input type="text" id="inputnz" name="pz" class="inputjoint" style="font-size: 20px;" disabled/><br/><br/>
+        <b>ox:</b> <input type="text" id="inputox" name="px" class="inputjoint" style="font-size: 20px;" disabled/>
+        <b>oy:</b> <input type="text" id="inputoy" name="py" class="inputjoint" style="font-size: 20px;" disabled/>
+        <b>oz:</b> <input type="text" id="inputoz" name="pz" class="inputjoint" style="font-size: 20px;" disabled/><br/><br/>
+        <b>ax:</b> <input type="text" id="inputax" name="px" class="inputjoint" style="font-size: 20px;" disabled/>
+        <b>ay:</b> <input type="text" id="inputay" name="py" class="inputjoint" style="font-size: 20px;" disabled/>
+        <b>az:</b> <input type="text" id="inputaz" name="pz" class="inputjoint" style="font-size: 20px;" disabled/><br/><br/>
+        <b>Px:</b> <input type="text" id="inputpx" name="px" class="inputjoint" style="font-size: 20px;" disabled/>
+        <b>Py:</b> <input type="text" id="inputpy" name="py" class="inputjoint" style="font-size: 20px;" disabled/>
+        <b>Pz:</b> <input type="text" id="inputpz" name="pz" class="inputjoint" style="font-size: 20px;" disabled/><br/><br/>
+        <script>
+        var joint1=0;
+        var joint2=0;
+        var joint3=0;
+        var joint4=0;
+        var joint5=0;
+        var joint6=0;
+        function init()
+        {
+            document.getElementById("inputjoint1").value='';
+            document.getElementById("inputjoint2").value='';
+            document.getElementById("inputjoint3").value='';
+            document.getElementById("inputjoint4").value='';
+            document.getElementById("inputjoint5").value='';
+            document.getElementById("inputjoint6").value='';
+            document.getElementById("inputpx").value='';
+            document.getElementById("inputpy").value='';
+            document.getElementById("inputpz").value='';
+            document.getElementById("inputnx").value='';
+            document.getElementById("inputny").value='';
+            document.getElementById("inputnz").value='';
+            document.getElementById("inputox").value='';
+            document.getElementById("inputoy").value='';
+            document.getElementById("inputoz").value='';
+            document.getElementById("inputax").value='';
+            document.getElementById("inputay").value='';
+            document.getElementById("inputaz").value='';
+        }
+        function getdata(){
+            joint1=parseFloat(document.getElementById("inputjoint1").value);
+            joint2=parseFloat(document.getElementById("inputjoint2").value);
+            joint3=parseFloat(document.getElementById("inputjoint3").value);
+            joint4=parseFloat(document.getElementById("inputjoint4").value);
+            joint5=parseFloat(document.getElementById("inputjoint5").value);
+            joint6=parseFloat(document.getElementById("inputjoint6").value);
+            var angle1_radian=joint1*Math.PI/180.0;
+            var angle2_radian=(joint2-90)*Math.PI/180.0;
+            var angle3_radian=(joint3+90)*Math.PI/180.0;
+            var angle4_radian=joint4*Math.PI/180.0;
+            var angle5_radian=joint5*Math.PI/180.0;
+            var angle6_radian=joint6*Math.PI/180.0;
+            var a0 = 0;
+            var a1 = 50;
+            var a2 = 425;
+            var a3 = 0;
+            var a4 = 0;
+            var a5 = 0;
+    
+            var d1 = 0;
+            var d2 = 0;
+            var d3 = 50;
+            var d4 = 425;
+            var d5 = 0;
+            var d6 = 100;
+            var c1=Math.cos(angle1_radian);
+            var c2=Math.cos(angle2_radian);
+            var c3=Math.cos(angle3_radian);
+            var c4=Math.cos(angle4_radian);
+            var c5=Math.cos(angle5_radian);
+            var c6=Math.cos(angle6_radian);
+
+            var s1=Math.sin(angle1_radian);
+            var s2=Math.sin(angle2_radian);
+            var s3=Math.sin(angle3_radian);
+            var s4=Math.sin(angle4_radian);
+            var s5=Math.sin(angle5_radian);
+            var s6=Math.sin(angle6_radian);
+            var nx= - c6*(s5*(c1*c2*s3 + c1*c3*s2) + c5*(s1*s4 - c4*(c1*c2*c3 - c1*s2*s3))) - s6*(c4*s1 + s4*(c1*c2*c3 - c1*s2*s3));
+            var ny=s6*(c1*c4 - s4*(c2*c3*s1 - s1*s2*s3)) - c6*(s5*(c2*s1*s3 + c3*s1*s2) - c5*(c1*s4 + c4*(c2*c3*s1 - s1*s2*s3)));
+            var nz= s4*s6*(c2*s3 + c3*s2) - c6*(s5*(c2*c3 - s2*s3) + c4*c5*(c2*s3 + c3*s2));
+
+            var ox=s6*(s5*(c1*c2*s3 + c1*c3*s2) + c5*(s1*s4 - c4*(c1*c2*c3 - c1*s2*s3))) - c6*(c4*s1 + s4*(c1*c2*c3 - c1*s2*s3));
+            var oy=s6*(s5*(c2*s1*s3 + c3*s1*s2) - c5*(c1*s4 + c4*(c2*c3*s1 - s1*s2*s3))) + c6*(c1*c4 - s4*(c2*c3*s1 - s1*s2*s3));
+            var oz=s6*(s5*(c2*c3 - s2*s3) + c4*c5*(c2*s3 + c3*s2)) + c6*s4*(c2*s3 + c3*s2)
+
+            var ax=c5*(c1*c2*s3 + c1*c3*s2) - s5*(s1*s4 - c4*(c1*c2*c3 - c1*s2*s3));
+            var ay=c5*(c2*s1*s3 + c3*s1*s2) + s5*(c1*s4 + c4*(c2*c3*s1 - s1*s2*s3));
+            var az=c5*(c2*c3 - s2*s3) - c4*s5*(c2*s3 + c3*s2);
+            var px=50*c1 - 50*s1 + 425*c1*c2 + 100*c5*(c1*c2*s3 + c1*c3*s2) - 100*s5*(s1*s4 - c4*(c1*c2*c3 - c1*s2*s3)) + 425*c1*c2*s3 + 425*c1*c3*s2;
+            var py=50*c1 + 50*s1 + 425*c2*s1 + 100*c5*(c2*s1*s3 + c3*s1*s2) + 100*s5*(c1*s4 + c4*(c2*c3*s1 - s1*s2*s3)) + 425*c2*s1*s3 + 425*c3*s1*s2;
+            var pz=425*c2*c3 - 425*s2 - 425*s2*s3 + 100*c5*(c2*c3 - s2*s3) - 100*c4*s5*(c2*s3 + c3*s2);
+            console.log(nx);
+            console.log(ny);
+            console.log(nz);
+            console.log(ox);
+            console.log(oy);
+            console.log(oz);
+            console.log(ax);
+            console.log(ay);
+            console.log(az);
+            console.log(px);
+            console.log(py);
+            console.log(pz);
+            var a=Math.pow(10,-3);
+            // document.getElementById("inputpx").value=px;
+            // document.getElementById("inputpy").value=py;
+            // document.getElementById("inputpz").value=pz;
+            if((-1*a)<px&&px<(1*a)){
+                document.getElementById("inputpx").value=0;
+            }else{
+                document.getElementById("inputpx").value=px;
+            }
+            if((-1*a)<py&&py<(1*a)){
+                document.getElementById("inputpy").value=0;
+            }else{
+                document.getElementById("inputpy").value=py;
+            }
+            if((-1*a)<pz&&pz<(1*a)){
+                document.getElementById("inputpz").value=0;
+            }else{
+                document.getElementById("inputpz").value=pz;
+            }
+            // document.getElementById("inputnx").value=nx;
+            // document.getElementById("inputny").value=ny;
+            // document.getElementById("inputnz").value=nz;
+            if((-1*a)<nx&&nx<(1*a)){
+                document.getElementById("inputnx").value=0;
+            }else{
+                document.getElementById("inputnx").value=nx;
+            }
+            if((-1*a)<ny&&ny<(1*a)){
+                document.getElementById("inputny").value=0;
+            }else{
+                document.getElementById("inputny").value=ny;
+            }
+            if((-1*a)<nz&&nz<(1*a)){
+                document.getElementById("inputnz").value=0;
+            }else{
+                document.getElementById("inputnz").value=nz;
+            }
+            
+            if((-1*a)<ox&&ox<(1*a)){
+                document.getElementById("inputox").value=0;
+            }else{
+                document.getElementById("inputox").value=ox;
+            }
+            if((-1*a)<oy&&oy<(1*a)){
+                document.getElementById("inputoy").value=0;
+            }else{
+                document.getElementById("inputoy").value=oy;
+            }
+            if((-1*a)<oz&&oz<(1*a)){
+                document.getElementById("inputoz").value=0;
+            }else{
+                document.getElementById("inputoz").value=oz;
+            }
+            // document.getElementById("inputox").value=ox;
+            // document.getElementById("inputoy").value=oy;
+            // document.getElementById("inputoz").value=oz;
+            if((-1*a)<ax&&ax<(1*a)){
+                document.getElementById("inputax").value=0;
+            }else{
+                document.getElementById("inputax").value=ax;
+            }
+            if((-1*a)<ay&&ay<(1*a)){
+                document.getElementById("inputay").value=0;
+            }else{
+                document.getElementById("inputay").value=ay;
+            }
+            if((-1*a)<az&&az<(1*a)){
+                document.getElementById("inputaz").value=0;
+            }else{
+                document.getElementById("inputaz").value=az;
+            }
+            // document.getElementById("inputax").value=ax;
+            // document.getElementById("inputay").value=ay;
+            // document.getElementById("inputaz").value=az;
+            
+            
+        }
+        </script>
+    </div>
+    <!-- <a href="http://localhost:3000/">dianji</a> -->
+</body>
+</html>

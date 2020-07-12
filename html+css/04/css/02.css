@@ -1,0 +1,26 @@
+.container{
+    width: 800px;
+    height: 600px;
+    border: 2px dashed red;
+
+}
+.box-red{
+    float: left;
+    width: 200px;
+    height: 200px;
+    background: red;
+}
+.box-blue{
+    float: right;
+    width: 200px;
+    height: 200px;
+    background: blue;
+    margin-right: 30pt;
+    margin-top: 12pt;
+}
+
+.box-green{    
+    width: 200px;
+    height: 240px;
+    background: green;
+}

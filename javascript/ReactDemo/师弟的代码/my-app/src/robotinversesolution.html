@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机器人逆解</title>
+    <style type="text/css">
+        *{
+                margin: 0;
+                padding: 0;
+                background-color: #EAEAEA;
+            }
+            .inputjoint{
+                width: 150px;
+                height: 25px;
+                
+            }
+            .outputjoint{
+                width: 100px;
+                height: 25px;
+            }
+            .center-in-center{
+                position: absolute;
+                top: 10%;
+                left: 15%;
+                width: 700px;
+                height: 540px;
+                background: rgba(0, 0, 0, .3);
+                border: 2px solid blue;
+                text-align: center;
+            }
+        </style>
+</head>
+<body>
+    
+  <div class="center-in-center">
+    nx:<input type="text" id="inputjointnx" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    ny:<input type="text" id="inputjointny" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    nz:<input type="text" id="inputjointnz" name="joint1" class="inputjoint" style="font-size: 20px;"/><br/><br/>
+    ox:<input type="text" id="inputjointox" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    oy:<input type="text" id="inputjointoy" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    oz:<input type="text" id="inputjointoz" name="joint1" class="inputjoint" style="font-size: 20px;"/><br/><br/>
+    ax:<input type="text" id="inputjointax" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    ay:<input type="text" id="inputjointay" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    az:<input type="text" id="inputjointaz" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    <br/><br/>
+    Px:<input type="text" id="inputjointpx" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    Py:<input type="text" id="inputjointpy" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    Pz:<input type="text" id="inputjointpz" name="joint1" class="inputjoint" style="font-size: 20px;"/>
+    <br/><br/>
+   
+    <button id="btn1" onclick="init();" style="width: 120px;height:30px">复位</button><br/><br/>
+    <h4>机器人8组逆解</h4><br/>
+    joint1:<input type="text" id="inputjoint1" name="joint1" class="outputjoint" style="font-size: 20px;" disabled/>
+    joint2:<input type="text" id="inputjoint2" name="joint1" class="outputjoint" style="font-size: 20px;" disabled/>
+    joint3:<input type="text" id="inputjoint3" name="joint1" class="outputjoint" style="font-size: 20px;" disabled/><br/><br/>
+    joint4:<input type="text" id="inputjoint4" name="joint1" class="outputjoint" style="font-size: 20px;" disabled/>
+    joint5:<input type="text" id="inputjoint5" name="joint1" class="outputjoint" style="font-size: 20px;" disabled/>
+    joint6:<input type="text" id="inputjoint6" name="joint1" class="outputjoint" style="font-size: 20px;" disabled/><br/><br/><br/>
+    <button id="onebtn" onclick="inverseJ1();" style="width: 120px;height:30px"> 逆解1</button>
+    <button id="onebtn" onclick="inverseJ2();" style="width: 120px;height:30px"> 逆解2</button>
+    <button id="onebtn" onclick="inverseJ3();" style="width: 120px;height:30px"> 逆解3</button>
+    <button id="onebtn" onclick="inverseJ4();" style="width: 120px;height:30px"> 逆解4</button><br/><br/>
+    <button id="onebtn" onclick="inverseJ5();" style="width: 120px;height:30px"> 逆解5</button>
+    <button id="onebtn" onclick="inverseJ6();" style="width: 120px;height:30px"> 逆解6</button>
+    <button id="onebtn" onclick="inverseJ7();" style="width: 120px;height:30px"> 逆解7</button>
+    <button id="onebtn" onclick="inverseJ8();" style="width: 120px;height:30px"> 逆解8</button>
+    <script>
+        // var nx=parseFloat(document.getElementById("inputjointnx").value);
+        // var ny=parseFloat(document.getElementById("inputjointny").value);
+        // var nz=parseFloat(document.getElementById("inputjointnz").value);
+        // var ox=parseFloat(document.getElementById("inputjointox").value);
+        // var oy=parseFloat(document.getElementById("inputjointoy").value);
+        // var oz=parseFloat(document.getElementById("inputjointoz").value);
+        // var ax=parseFloat(document.getElementById("inputjointax").value);
+        // var ay=parseFloat(document.getElementById("inputjointay").value);
+        // var az=parseFloat(document.getElementById("inputjointaz").value);
+        // var px=parseFloat(document.getElementById("inputjointpx").value);
+        // var py=parseFloat(document.getElementById("inputjointpy").value);
+        // var pz=parseFloat(document.getElementById("inputjointpz").value);
+      
+        function init(){
+        document.getElementById("inputjointnx").value='';
+        document.getElementById("inputjointny").value='';
+        document.getElementById("inputjointnz").value='';
+        document.getElementById("inputjointox").value='';
+        document.getElementById("inputjointoy").value='';
+        document.getElementById("inputjointoz").value='';
+        document.getElementById("inputjointax").value='';
+        document.getElementById("inputjointay").value='';
+        document.getElementById("inputjointaz").value='';
+        document.getElementById("inputjointpx").value='';
+        document.getElementById("inputjointpy").value='';
+        document.getElementById("inputjoint1").value='';
+        document.getElementById("inputjoint2").value='';
+        document.getElementById("inputjoint3").value='';
+        document.getElementById("inputjoint4").value='';
+        document.getElementById("inputjoint5").value='';
+        document.getElementById("inputjoint6").value='';  
+        
+        }
+
+        function inverseJ1(){
+            var nx=parseFloat(document.getElementById("inputjointnx").value);
+            var ny=parseFloat(document.getElementById("inputjointny").value);
+            var nz=parseFloat(document.getElementById("inputjointnz").value);
+            var ox=parseFloat(document.getElementById("inputjointox").value);
+            var oy=parseFloat(document.getElementById("inputjointoy").value);
+            var oz=parseFloat(document.getElementById("inputjointoz").value);
+            var ax=parseFloat(document.getElementById("inputjointax").value);
+            var ay=parseFloat(document.getElementById("inputjointay").value);
+            var az=parseFloat(document.getElementById("inputjointaz").value);
+            var px=parseFloat(document.getElementById("inputjointpx").value);
+            var py=parseFloat(document.getElementById("inputjointpy").value);
+            var pz=parseFloat(document.getElementById("inputjointpz").value);
+            var a1=50,a2=425,d3=50,d4=425,d6=100;
+            // var pax=d6*ax-px;
+            // var pay=py-d6*ay;
+            // var pp=Math.pow(pax,2)+Math.pow(pay,2);
+            // var pp1=Math.pow(pp,2)-50*50;
+            // var pp2=Math.pow(pp1,0.5);
+            // var theta1;
+            // theta1=Math.atan2(50,pp2)-Math.atan2(pay,pax);
+            // document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+            var pax=px-d6*ax;
+            var pay=py-d6*ay;
+            var paz=pz-d6*az;
+            var tt=Math.pow(pax,2)+Math.pow(pay,2)-Math.pow(d3,2);
+
+            var theta1=Math.atan2(pay,pax)-Math.atan2(d3,Math.pow(tt,0.5));
+            document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+
+            var t=pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1;
+            var t1=(Math.pow(t,2)+Math.pow(a2,2)+Math.pow(paz,2)-Math.pow(d4,2))/(2*a2);
+            var t2=Math.pow(t,2)+Math.pow(paz,2)-Math.pow(t1,2);
+
+            var theta2=Math.atan2(t1,paz)-Math.atan2(t1,Math.pow(t2,0.5));
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+
+        }
+        function inverseJ2(){
+            var nx=parseFloat(document.getElementById("inputjointnx").value);
+            var ny=parseFloat(document.getElementById("inputjointny").value);
+            var nz=parseFloat(document.getElementById("inputjointnz").value);
+            var ox=parseFloat(document.getElementById("inputjointox").value);
+            var oy=parseFloat(document.getElementById("inputjointoy").value);
+            var oz=parseFloat(document.getElementById("inputjointoz").value);
+            var ax=parseFloat(document.getElementById("inputjointax").value);
+            var ay=parseFloat(document.getElementById("inputjointay").value);
+            var az=parseFloat(document.getElementById("inputjointaz").value);
+            var px=parseFloat(document.getElementById("inputjointpx").value);
+            var py=parseFloat(document.getElementById("inputjointpy").value);
+            var pz=parseFloat(document.getElementById("inputjointpz").value);
+            var a1=50,a2=425,d3=50,d4=425,d6=100;
+            // var pax=d6*ax-px;
+            // var pay=py-d6*ay;
+            // var pp=Math.pow(pax,2)+Math.pow(pay,2);
+            // var pp1=Math.pow(pp,2)-50*50;
+            // var pp2=Math.pow(pp1,0.5);
+            // var theta1;
+            // theta1=Math.atan2(50,pp2)-Math.atan2(pay,pax);
+            // document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+            var pax=px-d6*ax;
+            var pay=py-d6*ay;
+            var paz=pz-d6*az;
+            var tt=Math.pow(pax,2)+Math.pow(pay,2)-Math.pow(d3,2);
+
+            var theta1=Math.atan2(pay,pax)-Math.atan2(d3,Math.pow(tt,0.5));
+            document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+
+            var t=pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1;
+            var t1=(Math.pow(t,2)+Math.pow(a2,2)+Math.pow(paz,2)-Math.pow(d4,2))/(2*a2);
+            var t2=Math.pow(t,2)+Math.pow(paz,2)-Math.pow(t1,2);
+
+            var theta2=Math.atan2(t1,paz)-Math.atan2(t1,Math.pow(t2,0.5));
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            // var p1=Math.pow(ax,2)+Math.pow(ay,2);
+            // var theta5=Math.atan2(Math.pow(p1,0.5),az);
+            // document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=-Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+
+        }
+
+        function inverseJ3(){
+            var nx=parseFloat(document.getElementById("inputjointnx").value);
+            var ny=parseFloat(document.getElementById("inputjointny").value);
+            var nz=parseFloat(document.getElementById("inputjointnz").value);
+            var ox=parseFloat(document.getElementById("inputjointox").value);
+            var oy=parseFloat(document.getElementById("inputjointoy").value);
+            var oz=parseFloat(document.getElementById("inputjointoz").value);
+            var ax=parseFloat(document.getElementById("inputjointax").value);
+            var ay=parseFloat(document.getElementById("inputjointay").value);
+            var az=parseFloat(document.getElementById("inputjointaz").value);
+            var px=parseFloat(document.getElementById("inputjointpx").value);
+            var py=parseFloat(document.getElementById("inputjointpy").value);
+            var pz=parseFloat(document.getElementById("inputjointpz").value);
+            var a1=50,a2=425,d3=50,d4=425,d6=100;
+            // var pax=d6*ax-px;
+            // var pay=py-d6*ay;
+            // var pp=Math.pow(pax,2)+Math.pow(pay,2);
+            // var pp1=Math.pow(pp,2)-50*50;
+            // var pp2=Math.pow(pp1,0.5);
+            // var theta1;
+            // theta1=Math.atan2(50,pp2)-Math.atan2(pay,pax);
+            // document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+            var pax=px-d6*ax;
+            var pay=py-d6*ay;
+            var paz=pz-d6*az;
+            var tt=Math.pow(pax,2)+Math.pow(pay,2)-Math.pow(d3,2);
+
+            var theta1=Math.atan2(pay,pax)-Math.atan2(d3,Math.pow(tt,0.5));
+            document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+
+            var t=pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1;
+            var t1=(Math.pow(t,2)+Math.pow(a2,2)+Math.pow(paz,2)-Math.pow(d4,2))/(2*a2);
+            var t2=Math.pow(t,2)+Math.pow(paz,2)-Math.pow(t1,2);
+
+            var theta2=Math.atan2(t1,paz)-Math.atan2(t1,-Math.pow(t2,0.5));
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+
+
+        }
+        function inverseJ4(){
+            var nx=parseFloat(document.getElementById("inputjointnx").value);
+            var ny=parseFloat(document.getElementById("inputjointny").value);
+            var nz=parseFloat(document.getElementById("inputjointnz").value);
+            var ox=parseFloat(document.getElementById("inputjointox").value);
+            var oy=parseFloat(document.getElementById("inputjointoy").value);
+            var oz=parseFloat(document.getElementById("inputjointoz").value);
+            var ax=parseFloat(document.getElementById("inputjointax").value);
+            var ay=parseFloat(document.getElementById("inputjointay").value);
+            var az=parseFloat(document.getElementById("inputjointaz").value);
+            var px=parseFloat(document.getElementById("inputjointpx").value);
+            var py=parseFloat(document.getElementById("inputjointpy").value);
+            var pz=parseFloat(document.getElementById("inputjointpz").value);
+            var a1=50,a2=425,d3=50,d4=425,d6=100;
+            // var pax=d6*ax-px;
+            // var pay=py-d6*ay;
+            // var pp=Math.pow(pax,2)+Math.pow(pay,2);
+            // var pp1=Math.pow(pp,2)-50*50;
+            // var pp2=Math.pow(pp1,0.5);
+            // var theta1;
+            // theta1=Math.atan2(50,pp2)-Math.atan2(pay,pax);
+            // document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+            var pax=px-d6*ax;
+            var pay=py-d6*ay;
+            var paz=pz-d6*az;
+            var tt=Math.pow(pax,2)+Math.pow(pay,2)-Math.pow(d3,2);
+
+            var theta1=Math.atan2(pay,pax)-Math.atan2(d3,Math.pow(tt,0.5));
+            document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+
+            var t=pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1;
+            var t1=(Math.pow(t,2)+Math.pow(a2,2)+Math.pow(paz,2)-Math.pow(d4,2))/(2*a2);
+            var t2=Math.pow(t,2)+Math.pow(paz,2)-Math.pow(t1,2);
+
+            var theta2=Math.atan2(t1,paz)-Math.atan2(t1,-Math.pow(t2,0.5));
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=-Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+        }
+        function inverseJ5(){
+            var nx=parseFloat(document.getElementById("inputjointnx").value);
+            var ny=parseFloat(document.getElementById("inputjointny").value);
+            var nz=parseFloat(document.getElementById("inputjointnz").value);
+            var ox=parseFloat(document.getElementById("inputjointox").value);
+            var oy=parseFloat(document.getElementById("inputjointoy").value);
+            var oz=parseFloat(document.getElementById("inputjointoz").value);
+            var ax=parseFloat(document.getElementById("inputjointax").value);
+            var ay=parseFloat(document.getElementById("inputjointay").value);
+            var az=parseFloat(document.getElementById("inputjointaz").value);
+            var px=parseFloat(document.getElementById("inputjointpx").value);
+            var py=parseFloat(document.getElementById("inputjointpy").value);
+            var pz=parseFloat(document.getElementById("inputjointpz").value);
+            var a1=50,a2=425,d3=50,d4=425,d6=100;
+            // var pax=d6*ax-px;
+            // var pay=py-d6*ay;
+            // var pp=Math.pow(pax,2)+Math.pow(pay,2);
+            // var pp1=Math.pow(pp,2)-50*50;
+            // var pp2=Math.pow(pp1,0.5);
+            // var theta1;
+            // theta1=Math.atan2(50,pp2)-Math.atan2(pay,pax);
+            // document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+            var pax=px-d6*ax;
+            var pay=py-d6*ay;
+            var paz=pz-d6*az;
+            var tt=Math.pow(pax,2)+Math.pow(pay,2)-Math.pow(d3,2);
+
+            var theta1=Math.atan2(pay,pax)-Math.atan2(d3,-Math.pow(tt,0.5));
+            document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+
+            var t=pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1;
+            var t1=(Math.pow(t,2)+Math.pow(a2,2)+Math.pow(paz,2)-Math.pow(d4,2))/(2*a2);
+            var t2=Math.pow(t,2)+Math.pow(paz,2)-Math.pow(t1,2);
+
+            if(t2>=0){
+            var theta2=Math.atan2(t1,paz)-Math.atan2(t1,Math.pow(t2,0.5));
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+            
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+        }
+        else{
+            var theta2=Math.atan2(t,paz);
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+            
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=Math.pow((1-Math.pow(p11,2)),0.5);
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+        
+
+            
+        }
+        }
+        function inverseJ6(){
+            var nx=parseFloat(document.getElementById("inputjointnx").value);
+            var ny=parseFloat(document.getElementById("inputjointny").value);
+            var nz=parseFloat(document.getElementById("inputjointnz").value);
+            var ox=parseFloat(document.getElementById("inputjointox").value);
+            var oy=parseFloat(document.getElementById("inputjointoy").value);
+            var oz=parseFloat(document.getElementById("inputjointoz").value);
+            var ax=parseFloat(document.getElementById("inputjointax").value);
+            var ay=parseFloat(document.getElementById("inputjointay").value);
+            var az=parseFloat(document.getElementById("inputjointaz").value);
+            var px=parseFloat(document.getElementById("inputjointpx").value);
+            var py=parseFloat(document.getElementById("inputjointpy").value);
+            var pz=parseFloat(document.getElementById("inputjointpz").value);
+            var a1=50,a2=425,d3=50,d4=425,d6=100;
+            // var pax=d6*ax-px;
+            // var pay=py-d6*ay;
+            // var pp=Math.pow(pax,2)+Math.pow(pay,2);
+            // var pp1=Math.pow(pp,2)-50*50;
+            // var pp2=Math.pow(pp1,0.5);
+            // var theta1;
+            // theta1=Math.atan2(50,pp2)-Math.atan2(pay,pax);
+            // document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+            var pax=px-d6*ax;
+            var pay=py-d6*ay;
+            var paz=pz-d6*az;
+            var tt=Math.pow(pax,2)+Math.pow(pay,2)-Math.pow(d3,2);
+
+            var theta1=Math.atan2(pay,pax)-Math.atan2(d3,-Math.pow(tt,0.5));
+            document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+
+            var t=pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1;
+            var t1=(Math.pow(t,2)+Math.pow(a2,2)+Math.pow(paz,2)-Math.pow(d4,2))/(2*a2);
+            var t2=Math.pow(t,2)+Math.pow(paz,2)-Math.pow(t1,2);
+
+            if(t2>=0){
+            var theta2=Math.atan2(t1,paz)-Math.atan2(t1,Math.pow(t2,0.5));
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+            
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=-(Math.pow((1-Math.pow(p11,2)),0.5));
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+            
+        }
+        else{
+            var theta2=Math.atan2(t,paz);
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+            
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=-Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+        
+        }
+        }
+        function inverseJ7(){
+            var nx=parseFloat(document.getElementById("inputjointnx").value);
+            var ny=parseFloat(document.getElementById("inputjointny").value);
+            var nz=parseFloat(document.getElementById("inputjointnz").value);
+            var ox=parseFloat(document.getElementById("inputjointox").value);
+            var oy=parseFloat(document.getElementById("inputjointoy").value);
+            var oz=parseFloat(document.getElementById("inputjointoz").value);
+            var ax=parseFloat(document.getElementById("inputjointax").value);
+            var ay=parseFloat(document.getElementById("inputjointay").value);
+            var az=parseFloat(document.getElementById("inputjointaz").value);
+            var px=parseFloat(document.getElementById("inputjointpx").value);
+            var py=parseFloat(document.getElementById("inputjointpy").value);
+            var pz=parseFloat(document.getElementById("inputjointpz").value);
+            var a1=50,a2=425,d3=50,d4=425,d6=100;
+            // var pax=d6*ax-px;
+            // var pay=py-d6*ay;
+            // var pp=Math.pow(pax,2)+Math.pow(pay,2);
+            // var pp1=Math.pow(pp,2)-50*50;
+            // var pp2=Math.pow(pp1,0.5);
+            // var theta1;
+            // theta1=Math.atan2(50,pp2)-Math.atan2(pay,pax);
+            // document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+            var pax=px-d6*ax;
+            var pay=py-d6*ay;
+            var paz=pz-d6*az;
+            var tt=Math.pow(pax,2)+Math.pow(pay,2)-Math.pow(d3,2);
+
+            var theta1=Math.atan2(pay,pax)-Math.atan2(d3,-Math.pow(tt,0.5));
+            document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+
+            var t=pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1;
+            var t1=(Math.pow(t,2)+Math.pow(a2,2)+Math.pow(paz,2)-Math.pow(d4,2))/(2*a2);
+            var t2=Math.pow(t,2)+Math.pow(paz,2)-Math.pow(t1,2);
+
+            if(t2>=0){
+            var theta2=Math.atan2(t1,paz)-Math.atan2(t1,-Math.pow(t2,0.5));
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+            
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+        }
+        else{
+            var theta2=Math.atan2(t,paz);
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+            
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+        }
+
+
+        }
+        function inverseJ8(){
+            var nx=parseFloat(document.getElementById("inputjointnx").value);
+            var ny=parseFloat(document.getElementById("inputjointny").value);
+            var nz=parseFloat(document.getElementById("inputjointnz").value);
+            var ox=parseFloat(document.getElementById("inputjointox").value);
+            var oy=parseFloat(document.getElementById("inputjointoy").value);
+            var oz=parseFloat(document.getElementById("inputjointoz").value);
+            var ax=parseFloat(document.getElementById("inputjointax").value);
+            var ay=parseFloat(document.getElementById("inputjointay").value);
+            var az=parseFloat(document.getElementById("inputjointaz").value);
+            var px=parseFloat(document.getElementById("inputjointpx").value);
+            var py=parseFloat(document.getElementById("inputjointpy").value);
+            var pz=parseFloat(document.getElementById("inputjointpz").value);
+            var a1=50,a2=425,d3=50,d4=425,d6=100;
+            // var pax=d6*ax-px;
+            // var pay=py-d6*ay;
+            // var pp=Math.pow(pax,2)+Math.pow(pay,2);
+            // var pp1=Math.pow(pp,2)-50*50;
+            // var pp2=Math.pow(pp1,0.5);
+            // var theta1;
+            // theta1=Math.atan2(50,pp2)-Math.atan2(pay,pax);
+            // document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+            var pax=px-d6*ax;
+            var pay=py-d6*ay;
+            var paz=pz-d6*az;
+            var tt=Math.pow(pax,2)+Math.pow(pay,2)-Math.pow(d3,2);
+
+            var theta1=Math.atan2(pay,pax)-Math.atan2(d3,-Math.pow(tt,0.5));
+            document.getElementById("inputjoint1").value=theta1*180/Math.PI;
+
+            var t=pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1;
+            var t1=(Math.pow(t,2)+Math.pow(a2,2)+Math.pow(paz,2)-Math.pow(d4,2))/(2*a2);
+            var t2=Math.pow(t,2)+Math.pow(paz,2)-Math.pow(t1,2);
+
+            if(t2>=0){
+            var theta2=Math.atan2(t1,paz)-Math.atan2(t1,-Math.pow(t2,0.5));
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+            
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=-Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+        }
+        else{
+            var theta2=Math.atan2(t,paz);
+            document.getElementById("inputjoint2").value=theta2*180/Math.PI+90;
+            
+            var theta3=Math.atan2(pax*Math.cos(theta1)+pay*Math.sin(theta1)-a1-a2*Math.cos(theta2),paz+a2*Math.sin(theta2)-theta2);
+            document.getElementById("inputjoint3").value=theta3*180/Math.PI-90;
+
+            var p11=az*Math.cos(theta2)*Math.cos(theta3)-az*Math.sin(theta2)*Math.sin(theta3)+ax*Math.cos(theta1)*Math.sin(theta3)*Math.cos(theta2)+ax*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ay*Math.cos(theta2)*Math.sin(theta3)*Math.sin(theta1)+ay*Math.cos(theta3)*Math.sin(theta2)*Math.sin(theta1);
+            var p511=-Math.pow((1-Math.pow(p11,2)),0.5)
+            var theta5=Math.atan2(p511,p11);
+            document.getElementById("inputjoint5").value=theta5*180/Math.PI;
+            if(Math.sin(theta5)==0)
+            {
+                var theta4=0;
+                document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+
+            }
+            else{
+            var p5=(-ax*Math.sin(theta1)+ay*Math.cos(theta1))/Math.sin(theta5);
+            var p51=Math.pow((1-Math.pow(p5,2)),0.5);
+            var theta4=Math.atan2(p5,p51);
+            document.getElementById("inputjoint4").value=theta4*180/Math.PI;
+            }
+
+            var p6=-(nz*Math.cos(theta2)*Math.cos(theta3)-nz*Math.sin(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta2)*Math.sin(theta3)+nx*Math.cos(theta1)*Math.cos(theta3)*Math.sin(theta2)+ny*Math.cos(theta2)*Math.sin(theta1)*Math.sin(theta3)+ny*Math.cos(theta3)*Math.sin(theta1)*Math.sin(theta1))/Math.sin(theta5);
+            var p61=Math.pow((1-Math.pow(p6,2)),0.5);
+            var theta6=Math.atan2(p61,p6);
+            document.getElementById("inputjoint6").value=theta6*180/Math.PI;
+        }
+
+
+        }
+
+
+
+
+
+
+
+    </script>
+
+
+  </div>
+    
+</body>
+</html>

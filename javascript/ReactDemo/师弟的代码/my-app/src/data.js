@@ -1,0 +1,12 @@
+var arr1=new Array(8.2,20.4,30.7,50,40,10.5);
+var arr2=new Array(4.5,18.9,30.5,80.7,50.3,38.4);
+var arr3=new Array(10.4,30.5,50.3,88.1,30.8,8.7);
+var arr4=new Array(13.4,18.3,30.5,60.7,44.3,38.4);
+var arr5=new Array(4,18,33.5,89.7,70.3,48.4,20.7);
+var arr6=new Array(20.5,25.7,39.7,67.7,50.3,48.4);
+exports.arr1=arr1;
+exports.arr2=arr2;
+exports.arr3=arr3;
+exports.arr4=arr4;
+exports.arr5=arr5;
+exports.arr6=arr6;

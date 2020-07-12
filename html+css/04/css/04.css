@@ -1,0 +1,32 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.image{
+    /* 把图片变成块状 */
+    display: block;
+    width: 1366px;
+    height: 500px;
+    background-image: url(../img/banner.png);
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+/* 父用相对相当于把世界坐标系移动至父类 ，然后子类再用绝对，就是相对于父类了*/
+.box{
+    position: relative;
+    width: 1366px;
+    height: 500px;
+    background-color: #272727;
+    margin-left: auto;
+    margin-right: auto;
+    /* background: pink; */
+}
+.label{
+    position: absolute;
+    top: 0px;
+    left: 120px;
+    display: block;
+    width: 151px;
+    height: 38px;    
+}

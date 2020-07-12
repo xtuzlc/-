@@ -1,0 +1,195 @@
+/* 公有布局 */
+.fl { float: left; } /* 面向属性的 CSS */
+.fr { float: right; }
+
+.mark {
+  /* 位置 */
+  position: absolute; /* 绝对定位 */
+  top: -20px;
+  left: 143px;
+  padding-left: -4px;
+
+  /* 盒子模型 */
+  width: 151px;
+  height: 38px;
+  background-image: url(../img/mark.png);
+
+  /* 文本排版 */
+  font-size: 25px;
+  line-height: 38px;
+  text-align: center;
+}
+
+/* 页面容器 */
+.page {
+  margin: 0 auto; /* 水平居中 */
+  width: 1280px;
+}
+
+/* 头部 */
+.header {
+  width: 100%;
+  height: 40px;
+  background-color: #3f3f3f;
+}
+.header-logo { /* 前缀，使用前缀来区分模块的命名 */
+  margin-top: 10px;
+  margin-left: 90px;
+  width: 87px;
+  height: 21px;
+}
+
+/* 页面导航 */
+.nav {
+  width: 100%;
+  height: 60px;
+  background-color: #ecd830;
+}
+.nav-menu {
+  float: right;
+  margin-right: 100px;
+  list-style: none; /* 去掉默认的列表样式 */
+}
+.nav-menu-li {
+  float: left;
+  height: 60px;
+  width: 130px;
+  line-height: 60px; /* 文字垂直居中 */
+}
+.nav-menu-img {
+  vertical-align: -8px;
+}
+
+/* 横幅广告 */
+.banner {
+  display: block;
+  width: 1280px;
+  height: 500px;
+}
+
+/* 品牌特点 */
+.brand {
+  position: relative; /* 支持子元素绝对定位 */
+  padding-top: 60px;
+  width: 100%;
+  height: 180px;
+  background: #272727;
+}
+.brand-list {
+  margin-right: auto;
+  margin-left: auto;
+  width: 900px;
+
+  list-style: none;
+  color: white;
+  font-size: 26px;
+  font-weight: bold;
+}
+.brand-list-li {
+  float: left;
+  margin-right: 20px;
+  width: 280px;
+}
+.brand-list-img {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* 荣誉保证 */
+.honor {
+  padding-top: 20px;
+  padding-bottom: 40px;
+  width: 100%;
+  background: #efefef;
+}
+.honor-title {
+  margin-right: auto;
+  margin-bottom: 20px;
+  margin-left: auto;
+  display: block;
+}
+.honor-main {
+  margin-right: auto;
+  margin-left: auto;
+  position: relative;
+  width: 1080px;
+  height: 386px;
+  background-image: url(../img/honor-bg.png);
+}
+.honor-box1 {
+  position: absolute;
+  top: 100px;
+  left: 60px;
+
+  padding: 30px;
+  width: 520px;
+
+  color: #fff;
+  line-height: 36px;
+}
+.honor-box2 {
+  position: absolute;
+  left: 770px;
+  top: 175px;
+  font-size: 20px;
+}
+.honor-box3 {
+  position: absolute;
+  left: 920px;
+  top: 280px;
+  font-size: 20px;
+}
+
+/* 关于我们 */
+.about {
+  position: relative;
+  width: 1280px;
+}
+.about-img {
+  display: block;
+  width: 1280px;
+  height: 220px;
+}
+.about-content {
+  padding-top: 20px;
+  padding-bottom: 50px;
+  color: #fff;
+  background-color: #272727;
+}
+.about-text {
+  margin-right: auto;
+  margin-left: auto;
+  width: 1000px;
+  line-height: 26px;
+}
+
+/* 新闻动态 */
+.news {
+  position: relative;
+  padding: 40px;
+  width: 1200px;
+  height: 320px;
+  background: #efefef;
+}
+.news-img {
+  float: left;
+}
+.news-ul {
+  margin-right: 100px;
+  float: right;
+  list-style: none;
+  line-height: 50px;
+}
+.news-li {
+  width: 380px;
+}
+
+/* 版权 */
+.copyright {
+  width: 100%;
+  height: 70px;
+  background-color: #000;
+  color: #ccc;
+  text-align: center;
+  line-height: 70px;
+}

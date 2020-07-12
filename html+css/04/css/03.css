@@ -1,0 +1,15 @@
+.box1{
+    width: 200px;
+    height: 300px;
+    position: absolute;
+    top: 100px;  /* 距离顶端窗口的距离*/
+    left: 200px;
+    border: 2px dashed rebeccapurple;
+    line-height: 300px;
+    background-color: green
+}
+.box-normal{
+    width: 200px;
+    height: 300px;
+    background-color: pink;
+}

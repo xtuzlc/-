@@ -1,0 +1,18 @@
+/* p {
+    color: green;
+} */
+/* id 选择器 */
+#test_green{
+    /* id选择器：唯一匹配元素，不能重复使用 */
+    color: green;
+    text-align: center;
+}
+/* 类选择器 */
+.text-red{
+    color: red;
+    text-align: center;
+    /* text-decoration: none */
+}
+a{
+     text-decoration:none
+} 

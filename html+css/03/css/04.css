@@ -1,0 +1,39 @@
+/* 浏览器样式重置 */
+/*  */
+* {/* 匹配所有元素*/
+/* margin 外边距 */
+/* padding 内边距 */
+    margin: 0px;
+    padding: 0px;
+}
+.box{
+    /* 距离底部的外边距 */
+    margin-bottom: 20px;
+    background-color: pink;
+    background-image: url(../img/1.jpg);
+    /* 设置宽 高 */
+    /* background-size: 500px 200px; */
+    width: 400px;
+    height: 200px;
+    /* 设置边框的粗细 线型 颜色 */
+    border:4px solid green;
+
+}
+.box2{
+    width: 400px;
+    height: 200px;
+    padding: 12px;
+    border:4px dashed blue;
+    
+}
+.box3{
+    margin-top: 20px;
+    /* auto是自动撑开 相当于弹簧 */
+    margin-right: auto;
+    margin-left: auto;
+    width: 400px;
+    height: 200px;
+    padding: 12px;
+    border:4px dashed red;
+    
+}
